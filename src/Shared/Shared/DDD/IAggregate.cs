@@ -1,0 +1,35 @@
+﻿namespace Shared.DDD
+{
+    public interface IAggregate<T> : IAggregate,IEntity<T>
+    {
+
+    }
+
+    public interface IAggregate : IEntity
+    {
+        IReadOnlyList<IDomainEvent> DomainEvents {  get; }
+
+        IDomainEvent[] ClearIDomainEvent();
+    }
+
+    public abstract class Aggregate<TId> : Entity<TId>, IAggregate<TId>
+    {
+        private readonly List<IDomainEvent> _domainEvents = new();
+
+        public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
+        public void AddDomainEvent(IDomainEvent domainEvent)
+        {
+            _domainEvents.Add(domainEvent);
+        }
+
+        public IDomainEvent[] ClearIDomainEvent()
+        {
+            IDomainEvent[] domainEvents = _domainEvents.ToArray();
+
+            _domainEvents.Clear();
+
+            return domainEvents;
+        }
+    }
+}
