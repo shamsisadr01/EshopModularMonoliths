@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Data.Interceptor;
+
 
 namespace Catalog
 {
@@ -9,20 +12,43 @@ namespace Catalog
         public static IServiceCollection AddCatalogModule(this IServiceCollection services, IConfiguration configuration)
         {
             // Add Service To Conatiner
-            //services
-            //    .AddApplicationServices()
-            //    .AddInfrastructureServices(configuration)
-            //    .AddApiServices(configuration)
+
+            // Api Endpoint Services
+
+            // Application Use Case Services
+            services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            });
+
+            // Data - Infrastructure Services
+            var connectionString = configuration.GetConnectionString("Database");
+
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
+
+            services.AddDbContext<CatalogDbContext>((sp,options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                options.UseNpgsql(connectionString);
+            });
+
+            services.AddScoped<IDataSeeder,CatalogDataSeeder>();
+
             return services;
         }
 
         public static IApplicationBuilder UseCatalogModule(this IApplicationBuilder app)
         {
-            // Add Service To Conatiner
-            //services
-            //    .UseApplicationServices()
-            //    .UseInfrastructureServices(configuration)
-            //    .UseApiServices(configuration)
+            // Configure the request pipline
+
+            // 1. Use Api Endpoint Services
+
+            // 2. Use Application Use Case Services
+
+            // 3. UseData - Infrastructure Services
+            app.UseMigration<CatalogDbContext>();
+
             return app;
         }
     }

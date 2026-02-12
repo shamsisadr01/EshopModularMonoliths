@@ -1,0 +1,28 @@
+﻿
+namespace Catalog.Products.Features.GetProductByCategory
+{
+    public record GetProductByCategoryQuery(string Category)
+    : IQuery<GetProductByCategoryResult>;
+    public record GetProductByCategoryResult(IEnumerable<ProductDto> Products);
+    internal class GetProductByCategoryHandler : IQueryHandler<GetProductByCategoryQuery, GetProductByCategoryResult>
+    {
+        private readonly CatalogDbContext _catalogDbContext;
+
+        public GetProductByCategoryHandler(CatalogDbContext catalogDbContext)
+        {
+            _catalogDbContext = catalogDbContext;
+        }
+        public async Task<GetProductByCategoryResult> Handle(GetProductByCategoryQuery request, CancellationToken cancellationToken)
+        {
+            var products = await _catalogDbContext.Products
+                .AsNoTracking()
+                .Where(p => p.Category.Contains(request.Category))
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+
+            var productDtos = products.Adapt<List<ProductDto>>();
+
+            return new GetProductByCategoryResult(productDtos);
+        }
+    }
+}

@@ -6,7 +6,7 @@
 
         public List<string> Category { get; private set; } = new();
 
-        public string Discription { get; private set; } = default;
+        public string Description { get; private set; } = default;
 
         public string ImageFile { get; private set; } = default;
 
@@ -25,7 +25,7 @@
                 Id = id,
                 Name = name,
                 Category = category,
-                Discription = discription,
+                Description = discription,
                 ImageFile = imageFile,
                 Price = price
             };
@@ -35,7 +35,7 @@
             return product;
         }
 
-        public void Update(Guid id, string name, List<string> category,
+        public void Update(string name, List<string> category,
             string discription, string imageFile, decimal price)
         {
             ArgumentException.ThrowIfNullOrEmpty(name);
@@ -43,7 +43,7 @@
 
             Name = name;
             Category = category;
-            Discription = discription;
+            Description = discription;
             ImageFile = imageFile;
            
             if(Price != price)

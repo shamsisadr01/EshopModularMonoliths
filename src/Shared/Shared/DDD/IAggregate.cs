@@ -9,6 +9,6 @@
     {
         IReadOnlyList<IDomainEvent> DomainEvents {  get; }
 
-        IDomainEvent[] ClearIDomainEvent();
+        IDomainEvent[] ClearDomainEvent();
     }
 }

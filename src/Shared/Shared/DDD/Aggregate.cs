@@ -11,7 +11,7 @@
             _domainEvents.Add(domainEvent);
         }
 
-        public IDomainEvent[] ClearIDomainEvent()
+        public IDomainEvent[] ClearDomainEvent()
         {
             IDomainEvent[] domainEvents = _domainEvents.ToArray();
 
