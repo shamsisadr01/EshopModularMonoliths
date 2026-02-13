@@ -2,7 +2,7 @@
 {
     public record CreateProductCommand(ProductDto Product) : ICommand<CreateProductResult>;
 
-    public record CreateProductResult(Guid id);
+    public record CreateProductResult(Guid Id);
 
     internal class CreateProductHandler : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
@@ -25,7 +25,7 @@
 
         private Product CreateNewProduct(ProductDto product)
         {
-            return Product.Create(product.Id, product.Name, product.Category, product.Description, product.ImageFile, product.Price);
+            return Product.Create(Guid.NewGuid(), product.Name, product.Category, product.Description, product.ImageFile, product.Price);
         }
     }
 }
