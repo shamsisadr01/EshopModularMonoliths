@@ -1,8 +1,12 @@
-﻿namespace Catalog.Products.Features.GetProducts
+﻿using Microsoft.EntityFrameworkCore;
+using Shared.Pagination;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
+namespace Catalog.Products.Features.GetProducts
 {
-    public record GetProductsQuery()
+    public record GetProductsQuery(PaginationRequest PaginationRequest)
     : IQuery<GetProductsResult>;
-    public record GetProductsResult(IEnumerable<ProductDto> Products);
+    public record GetProductsResult(PaginatedResult<ProductDto> Products);
 
     internal class GetProductsHandler : IQueryHandler<GetProductsQuery, GetProductsResult>
     {
@@ -12,16 +16,39 @@
         {
             _catalogDbContext = catalogDbContext;
         }
-        public async Task<GetProductsResult> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+        public async Task<GetProductsResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
         {
-            var products = await _catalogDbContext.Products
-                .AsNoTracking()
-                .OrderBy(p=>p.Name)
-                .ToListAsync(cancellationToken);
+            //var products = await _catalogDbContext.Products
+            //    .AsNoTracking()
+            //    .OrderBy(p=>p.Name)
+            //    .ToListAsync(cancellationToken);
 
+            //var productDtos = products.Adapt<List<ProductDto>>();
+
+            //return new GetProductsResult(productDtos);
+
+            var pageIndex = query.PaginationRequest.PageIndex;
+            var pageSize = query.PaginationRequest.PageSize;
+
+            var totalCount = await _catalogDbContext.Products.LongCountAsync(cancellationToken);
+
+            var products = await _catalogDbContext.Products
+                            .AsNoTracking()
+                            .OrderBy(p => p.Name)
+                            .Skip(pageSize * pageIndex)
+                            .Take(pageSize)
+                            .ToListAsync(cancellationToken);
+
+            //mapping product entity to ProductDto using Mapster
             var productDtos = products.Adapt<List<ProductDto>>();
 
-            return new GetProductsResult(productDtos);
+            return new GetProductsResult(
+                new PaginatedResult<ProductDto>(
+                    pageIndex,
+                    pageSize,
+                    totalCount,
+                    productDtos)
+                );
         }
 
     

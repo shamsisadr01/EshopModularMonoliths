@@ -1,4 +1,9 @@
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, config) =>
+    config.ReadFrom.Configuration(context.Configuration));
 
 // Add Service To Conatiner
 
@@ -15,12 +20,16 @@ builder.Services
     .AddBasketModule(builder.Configuration)
     .AddOrderingModule(builder.Configuration);
 
+builder.Services
+    .AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();
 
 // Configure the Http Requset pipeline
 
 app.MapCarter();
+app.UseSerilogRequestLogging();
+app.UseExceptionHandler(options => { });
 
 app
     .UseCatalogModule()

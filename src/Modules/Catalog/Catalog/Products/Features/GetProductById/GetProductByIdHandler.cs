@@ -23,7 +23,7 @@ namespace Catalog.Products.Features.GetProductById
 
             if (product is null)
             {
-                throw new Exception($"Product Not Found {request.Id}");
+                throw new ProductNotFoundException(request.Id);
             }
 
             //mapping product entity to productdto
