@@ -7,6 +7,7 @@ builder.Host.UseSerilog((context, config) =>
 
 // Add Service To Conatiner
 
+//common services: carter, mediatr, fluentvalidation, masstransit
 var catalogAssembly = typeof(CatalogModule).Assembly;
 var basketAssembly = typeof(BasketModule).Assembly;
 var orderingAssembly = typeof(OrderingModule).Assembly;
@@ -14,7 +15,10 @@ var orderingAssembly = typeof(OrderingModule).Assembly;
 builder.Services
     .AddCarterWithAssemblies(catalogAssembly, basketAssembly, orderingAssembly);
 
+builder.Services
+    .AddMediatRWithAssemblies(catalogAssembly, basketAssembly, orderingAssembly);
 
+//module services: catalog, basket, ordering
 builder.Services
     .AddCatalogModule(builder.Configuration)
     .AddBasketModule(builder.Configuration)
