@@ -7,12 +7,14 @@
     <Project Path="Modules/Basket/Basket/Basket.csproj" Id="81057945-c95a-4a04-82cf-7729fac49d15" />
   </Folder>
   <Folder Name="/Modules/Catalog/">
+    <Project Path="Modules/Catalog/Catalog.Contracts/Catalog.Contracts.csproj" Id="29d1257b-d5c2-44f4-8bbb-03cbff89786d" />
     <Project Path="Modules/Catalog/Catalog/Catalog.csproj" Id="747eeea0-2092-4ffc-b938-ff4fcb48779b" />
   </Folder>
   <Folder Name="/Modules/Ordering/">
     <Project Path="Modules/Ordering/Ordering/Ordering.csproj" Id="a1aeb7e8-fdf3-4f45-9d99-207172030a27" />
   </Folder>
   <Folder Name="/Shared/">
+    <Project Path="Shared/Shared.Contracts/Shared.Contracts.csproj" Id="11514928-bbfa-4906-97e9-83b3fcabe886" />
     <Project Path="Shared/Shared/Shared.csproj" Id="78780dc3-7b49-43f6-ab7f-16733f174005" />
   </Folder>
   <Project Path="docker-compose.dcproj">
