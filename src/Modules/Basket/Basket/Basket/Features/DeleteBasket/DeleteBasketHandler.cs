@@ -8,28 +8,20 @@ namespace Basket.Basket.Features.DeleteBasket
 
     internal class DeleteBasketHandler : ICommandHandler<DeleteBasketCommand, DeleteBasketResult>
     {
-        private readonly BasketDbContext dbContext;
+        private readonly IBasketRepository repository;
 
-        public DeleteBasketHandler(BasketDbContext dbContext)
+        public DeleteBasketHandler(IBasketRepository repository)
         {
-            this.dbContext = dbContext;
+            this.repository = repository;
         }
+
         public async Task<DeleteBasketResult> Handle(DeleteBasketCommand command, CancellationToken cancellationToken)
         {
             //Delete Basket entity from command object
             //save to database
             //return result
 
-            var shoppincart = await dbContext.ShoppingCarts
-                .SingleOrDefaultAsync(s => s.UserName == command.UserName,cancellationToken);
-
-            if (shoppincart is null)
-            {
-                throw new BasketNotFoundException(command.UserName);
-            }
-
-            dbContext.ShoppingCarts.Remove(shoppincart);
-            await dbContext.SaveChangesAsync(cancellationToken);
+            await repository.DeleteBasket(command.UserName, cancellationToken);
 
             return new DeleteBasketResult(true);
         }

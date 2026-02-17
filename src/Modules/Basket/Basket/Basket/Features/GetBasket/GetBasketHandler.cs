@@ -1,5 +1,4 @@
 ﻿
-
 namespace Basket.Basket.Features.GetBasket
 {
     public record GetBasketQuery(string UserName)
@@ -8,23 +7,16 @@ namespace Basket.Basket.Features.GetBasket
 
     internal class GetBasketHandler : IQueryHandler<GetBasketQuery, GetBasketResult>
     {
-        private readonly BasketDbContext dbContext;
+        private readonly IBasketRepository repository;
 
-        public GetBasketHandler(BasketDbContext dbContext)
+        public GetBasketHandler(IBasketRepository repository)
         {
-            this.dbContext = dbContext;
+            this.repository = repository;
         }
+
         public async Task<GetBasketResult> Handle(GetBasketQuery query, CancellationToken cancellationToken)
         {
-            var basket = await dbContext.ShoppingCarts
-                .AsNoTracking()
-                .Include(s=>s.Items)
-                .SingleOrDefaultAsync(s => s.UserName == query.UserName, cancellationToken);
-
-            if (basket is null)
-            {
-                throw new BasketNotFoundException(query.UserName);
-            }
+            var basket = await repository.GetBasket(query.UserName,true, cancellationToken);
 
             var basketDto = basket.Adapt<ShoppingCartDto>();
 

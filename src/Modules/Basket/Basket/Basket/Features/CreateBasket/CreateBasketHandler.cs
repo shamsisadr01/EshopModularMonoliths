@@ -14,11 +14,11 @@
 
     internal class CreateBasketHandler : ICommandHandler<CreateBasketCommand, CreateBasketResult>
     {
-        private readonly BasketDbContext dbContext;
+        private readonly IBasketRepository repository;
 
-        public CreateBasketHandler(BasketDbContext dbContext)
+        public CreateBasketHandler(IBasketRepository repository)
         {
-            this.dbContext = dbContext;
+            this.repository = repository;
         }
 
         public async Task<CreateBasketResult> Handle(CreateBasketCommand command, CancellationToken cancellationToken)
@@ -29,8 +29,7 @@
 
             var shoppingCart = CreateNewBasket(command.ShoppingCart);
 
-            dbContext.ShoppingCarts.Add(shoppingCart);
-            await dbContext.SaveChangesAsync();
+            await repository.CreateBasket(shoppingCart, cancellationToken);
 
             return new CreateBasketResult(shoppingCart.Id);
         }

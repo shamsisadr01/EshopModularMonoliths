@@ -11,7 +11,7 @@ namespace Basket.Basket.Features.CreateBasket
             app.MapPost("/basket",
                 async (CreateBasketRequest request, ISender sender/* ClaimsPrincipal user*/) =>
                 {
-                   // var updatedShoppingCart = request.ShoppingCart with { UserName = userName };
+                    // var updatedShoppingCart = request.ShoppingCart with { UserName = userName };
 
                     var command = request.Adapt<CreateBasketCommand>();
 
@@ -24,8 +24,8 @@ namespace Basket.Basket.Features.CreateBasket
             .Produces<CreateBasketResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Create Basket")
-            .WithDescription("Create Basket")
-            .RequireAuthorization();
+            .WithDescription("Create Basket");
+          //  .RequireAuthorization();
         }
     }
 }
