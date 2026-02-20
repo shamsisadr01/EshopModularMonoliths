@@ -1,0 +1,21 @@
+﻿
+global using Shared.DDD;
+global using Ordering.Ordering.ValueObjects;
+global using Ordering.Ordering.Models;
+global using Ordering.Ordering.Events;
+global using MediatR;
+global using Microsoft.EntityFrameworkCore;
+global using System.Reflection;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Shared.Exceptions;
+global using FluentValidation;
+global using Ordering.Data;
+global using Ordering.Ordering.Dtos;
+global using Shared.Contracts.CQRS;
+global using Carter;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Routing;
+global using Mapster;
+global using Microsoft.AspNetCore.Builder;
+global using Ordering.Ordering.Exceptions;
+global using Shared.Pagination;
