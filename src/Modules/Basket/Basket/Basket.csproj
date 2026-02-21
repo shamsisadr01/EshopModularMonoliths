@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Folder Include="Basket\Events\" />
-    <Folder Include="Basket\Features\CheckoutBasket\" />
+    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
 </Project>

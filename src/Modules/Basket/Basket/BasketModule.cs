@@ -1,4 +1,5 @@
 ﻿
+using Basket.Data.Processors;
 using Basket.Data.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -37,7 +38,8 @@ namespace Basket
                 options.UseNpgsql(connectionString);
             });
 
-          //  services.AddScoped<IDataSeeder, CatalogDataSeeder>();
+            //  services.AddScoped<IDataSeeder, CatalogDataSeeder>();
+            services.AddHostedService<OutboxProcessor>();
 
             return services;
         }
